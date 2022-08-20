@@ -1,0 +1,33 @@
+body {
+    background-color: grey;
+}
+
+.cell-container {
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    gap: 5px;
+
+
+    padding: 3px;
+    margin: 0 auto;
+    width: 315px;
+    height: 315px;
+
+    border: black 3px solid;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    height: 100px;
+
+    background-color: rgb(124, 145, 32);
+    border-radius: 20px;
+
+    font-size: 5em;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(0, 204, 255)
+}
