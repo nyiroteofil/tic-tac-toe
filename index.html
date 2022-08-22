@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
     <script src="app.js"></script>
     <title>Tic-tac-toe</title>
 </head>
@@ -20,8 +21,15 @@
         <div class="cell c-2"></div>
         <div class="cell c-3"></div>
     </div>
-    <div class="options">
-        <span>X</span><span>O</span>
+    <div class="options-container">
+        <div class="options">
+            <h2>Pick your mark</h2>
+            <span id="marks">
+                <input type="radio" name="mark" value="X" id="mark-x" checked>
+                <input type="radio" name="mark" value="o" id="mark-o">
+            </span>
+            <h2></h2>
+        </div>
     </div>
 </body>
 </html>
