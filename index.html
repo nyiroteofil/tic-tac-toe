@@ -6,29 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
     <title>Tic-tac-toe</title>
 </head>
 <body>
     <div class="cell-container">
-        <div class="cell a-1"></div>
-        <div class="cell a-2"></div>
-        <div class="cell a-3"></div>
-        <div class="cell b-1"></div>
-        <div class="cell b-2"></div>
-        <div class="cell b-3"></div>
-        <div class="cell c-1"></div>
-        <div class="cell c-2"></div>
-        <div class="cell c-3"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
     </div>
     <div class="options-container">
         <div class="options">
             <h2>Pick your mark</h2>
             <span id="marks">
-                <input type="radio" name="mark" value="X" id="mark-x" checked>
-                <input type="radio" name="mark" value="o" id="mark-o">
+                <input type="radio" name="mark" value="x" id="mark-x" checked><label for="mark-x">X</label>
+                <input type="radio" name="mark" value="o" id="mark-o"><label for="mark-o">O</label>
             </span>
             <h2></h2>
+            <button>Start</button>
         </div>
     </div>
 </body>
