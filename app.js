@@ -29,10 +29,16 @@ const Player = (mark, playerTurn) => {
 const DomStuff = (() => {
     let startBtn = document.querySelector('button');
     let cells = document.querySelectorAll('.cell');
+    let winScreen = document.querySelector('.win-screen');
+    let winMsg = document.querySelector('.win-msg');
+    let retry = document.querySelector('.retry');
 
     return {
         startBtn,
-        cells
+        cells,
+        winScreen,
+        winMsg,
+        retry,
     }
 })();
 
@@ -52,20 +58,39 @@ const GameBoard = (() => {
         }
     };
 
+    let clearBoard = () => {
+        for (let i = 0; i < board.length; i++) {
+            board[i] = '';
+        }
+    }
+
     let hideOptions = () => {
         let container = document.querySelector('.options-container');
         container.classList.add('hide');
     }
 
-    let markBoard = (what, where) => {
-        board[where] = what;
+    let showWin = () => {
+        DomStuff.winScreen.classList.remove('hide');
+    };
+
+    let hideWin = () => {
+        DomStuff.winScreen.classList.add('hide');
+    }; 
+
+    let markBoard = (mark, index) => {
+        board[index] = mark;
 
         render();
+
+        if (GameFlow.player1.mark === mark) {
+            GameFlow.checkWin(GameFlow.player1);
+        } else {
+            GameFlow.checkWin(GameFlow.player1);
+        }
 
         GameFlow.player1.changeTurn();
         GameFlow.player2.changeTurn();
     }
-    
 
 
     return {
@@ -73,6 +98,9 @@ const GameBoard = (() => {
         hideOptions,
         board,
         markBoard,
+        hideWin,
+        showWin,
+        clearBoard,
         }
 })();
 
@@ -84,6 +112,8 @@ const GameFlow = (() => {
 
     const player1 = Player('', undefined);
     const player2 = Player('', undefined);
+
+    let eventFuncContainer = () => {playerMarkBoard(i)};
 
     let start = () => {
         let radioBtns = document.getElementsByName('mark');
@@ -102,7 +132,7 @@ const GameFlow = (() => {
                 GameBoard.hideOptions();
 
                 for (let i = 0; i < DomStuff.cells.length; i++) {
-                    DomStuff.cells[i].addEventListener('click', () => {GameFlow.playerMarkBoard(i)},{once: true});
+                    DomStuff.cells[i].addEventListener('click', () => {playerMarkBoard(i)}, {once: true});
                 }
             }
         })
@@ -116,11 +146,53 @@ const GameFlow = (() => {
         }
     }
 
+    let checkWin = (n) => {
+
+        console.log('Hi, this is a test');
+
+        /**checking rows and columns */
+        for (let i = 0; i < 3; i++) {
+            console.log(GameBoard.board[i], GameBoard.board[i + 3], GameBoard.board[i + 6] === n.mark);
+            if (GameBoard.board[i] === n.mark && GameBoard.board[i + 3] === n.mark && GameBoard.board[i + 6] === n.mark) {
+                Win(n)
+            } else if (GameBoard.board[i * 3] === n.mark && GameBoard.board[(i * 3) + 1] === n.mark && GameBoard.board[(i * 3) + 2] === n.mark) {
+                Win(n)
+            }
+        };
+
+        /**checking cross */
+        if (GameBoard.board[0] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[8] === n.mark) {
+            Win(n);
+        } else if (GameBoard.board[6] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[2] === n.mark) {
+            Win(n);
+        }
+    }
+
+    let Win = (player) => {
+        DomStuff.cells.forEach(e => {
+            e.textContent = '';
+        });
+
+        GameBoard.showWin();
+
+        if (player === player1) {
+            player1.addWin();
+            DomStuff.winMsg.textContent = `${player1.mark} Won! wins: ${player1.getWins()}`;
+        } else {
+            player1.addWin();
+            DomStuff.winMsg.textContent = `${player2.mark} Won! wins: ${player2.getWins()}`;
+        }
+
+        GameBoard.clearBoard();
+        DomStuff.retry.addEventListener('click', GameBoard.hideWin);
+    }
+
     return {
         start,
         playerMarkBoard,
         player1,
-        player2
+        player2,
+        checkWin,
         }
 })();
 
