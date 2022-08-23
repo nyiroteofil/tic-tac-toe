@@ -1,5 +1,5 @@
-const Player = (mark, turn) => {
-    let turn = turn;
+const Player = (mark, playerTurn) => {
+    let turn = playerTurn;
 
     let wins = 0;
 
@@ -8,21 +8,27 @@ const Player = (mark, turn) => {
     };
 
     let getWins = () => {return wins};
+
+    let getTurn = () => {return turn};
     
     let changeTurn = () => {
         if (turn === true) {
             turn = false;
         } else {
             turn = true;
-        }
+        };
     }
 
-    return {mark, addWin, getWins, changeTurn};
+    let changeTurnTo = (x) => {
+        turn = x;
+    }
+
+    return {mark, addWin, getWins, changeTurn, changeTurnTo, getTurn};
 };
 
 const DomStuff = (() => {
     let startBtn = document.querySelector('button');
-    let cells = document.querySelector('.cell');
+    let cells = document.querySelectorAll('.cell');
 
     return {
         startBtn,
@@ -36,10 +42,14 @@ const GameBoard = (() => {
      * table
      */
 
-    let board = new Array(9)
+    let board = ['', '', '', '', '', '', '', '', '',]
 
     let render = () => {
-        //rendering board
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] !== '') {
+                DomStuff.cells[i].textContent = board[i];
+            }
+        }
     };
 
     let hideOptions = () => {
@@ -51,6 +61,9 @@ const GameBoard = (() => {
         board[where] = what;
 
         render();
+
+        GameFlow.player1.changeTurn();
+        GameFlow.player2.changeTurn();
     }
     
 
@@ -69,45 +82,51 @@ const GameFlow = (() => {
      * will be built
      */
 
-    let player1;
-    let player2;
+    const player1 = Player('', undefined);
+    const player2 = Player('', undefined);
 
     let start = () => {
         let radioBtns = document.getElementsByName('mark');
 
-        radioBtns.forEach(e => {
+        radioBtns.forEach((e) => {
             if (e.checked) {
 
-                player1 = Player(e.value)
+                if (e.value === 'x') {
+                    player1.mark = 'x'; player1.changeTurnTo(true);
+                    player2.mark = 'o'; player2.changeTurnTo(false);
+                } else if (e.value === 'o') {
+                    player1.mark = 'o'; player1.changeTurnTo(false); 
+                    player2.mark = 'x'; player2.changeTurnTo(true);
+                }
 
                 GameBoard.hideOptions();
 
-                if (radioBtns.value === 'x') {
-                    player2 = Player('o', false);
-                    player1.turn = true;
-                } else {
-                    player2 = Player('o', true);
-                    player1.turn = false;
+                for (let i = 0; i < DomStuff.cells.length; i++) {
+                    DomStuff.cells[i].addEventListener('click', () => {GameFlow.playerMarkBoard(i)},{once: true});
                 }
             }
         })
     };
 
-    let markBoard = (i) => {
-        if (player1.turn === true) {
-            GameBoard.markBoard(player1.mark, i)
+    let playerMarkBoard = (i) => {
+        if (player1.getTurn() === true) {
+            GameBoard.markBoard(player1.mark, i);
         } else {
-            GameBoard.markBoard(player2.mark, i)
+            GameBoard.markBoard(player2.mark, i);
         }
     }
 
     return {
         start,
+        playerMarkBoard,
         player1,
         player2
         }
 })();
 
-DomStuff.startBtn.addEventListener('click', GameFlow.start)
+DomStuff.startBtn.addEventListener('click', GameFlow.start);
 
-/**now for the markings and saving the marks to the array with a for loop */
+/**now I have to make a function that checks for winner patterns after the third move
+ * and I will make an if statement in the game board which will call the end function
+ * if the array contains the winner array
+ */
