@@ -30,9 +30,11 @@ const DomStuff = (() => {
     let startBtn = document.querySelector('button');
     let cells = document.querySelectorAll('.cell');
     let winScreen = document.querySelector('.win-screen');
-    let winMsg = document.querySelector('.win-msg');
+    let winMsg = document.querySelector('.win-mark');
     let retry = document.querySelector('.retry');
-    let cellParent = document.querySelector('.cell-container')
+    let cellParent = document.querySelector('.cell-container');
+    let winCounter1 = document.querySelector('.win-counter-p1');
+    let winCounter2 = document.querySelector('.win-counter-p2');
 
     return {
         startBtn,
@@ -41,6 +43,8 @@ const DomStuff = (() => {
         winMsg,
         retry,
         cellParent,
+        winCounter1,
+        winCounter2,
     }
 })();
 
@@ -197,10 +201,14 @@ const GameFlow = (() => {
 
         if (player === player1) {
             player1.addWin();
-            DomStuff.winMsg.textContent = `${player1.mark} Won! wins: ${player1.getWins()}`;
+            DomStuff.winMsg.textContent = `${player1.mark.toUpperCase()}`;
+            DomStuff.winCounter1.textContent = `${player1.mark.toUpperCase()}: ${player1.getWins()} wins`;
+            DomStuff.winCounter2.textContent = `${player2.mark.toUpperCase()}: ${player2.getWins()} wins`;
         } else {
             player2.addWin();
-            DomStuff.winMsg.textContent = `${player2.mark} Won! wins: ${player2.getWins()}`;
+            DomStuff.winMsg.textContent = `${player2.mark.toUpperCase()}`;
+            DomStuff.winCounter1.textContent = `${player2.mark.toUpperCase()}: ${player2.getWins()} wins`;
+            DomStuff.winCounter2.textContent = `${player1.mark.toUpperCase()}: ${player1.getWins()} wins`;
         }
 
         GameBoard.clearBoard();
@@ -221,7 +229,6 @@ const GameFlow = (() => {
 
 DomStuff.startBtn.addEventListener('click', GameFlow.start);
 
-/**now I have to make a function that checks for winner patterns after the third move
- * and I will make an if statement in the game board which will call the end function
- * if the array contains the winner array
+/**the game is now fully functional but only as a PvP but later
+ * on I plan to implement an AI enemy
  */

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
     <script src="app.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
     <title>Tic-tac-toe</title>
 </head>
 <body>
@@ -29,13 +33,17 @@
                 <input type="radio" name="mark" value="o" id="mark-o"><label for="mark-o">O</label>
             </span>
             <h2></h2>
-            <button class="start">Start</button>
+            <button class="start"><img src="./pictures/boxing-fight-svgrepo-com.svg" alt="Start"></button>
         </div>
     </div>
     <div class="win-screen hide">
         <div class="win-card">
-            <p class="win-msg"></p>
-            <button class="retry">Retry</button>
+            <div class="name"><p class="win-mark"></p><p>wins</p></div>
+            <div class="win-display">
+                <p class="win-counter-p1"></p>
+                <p class="win-counter-p2"></p>
+            </div>
+            <button class="retry"><img src="./pictures/boxing-fight-svgrepo-com.svg" alt="Start"></button>
         </div>
     </div>
 </body>
