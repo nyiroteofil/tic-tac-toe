@@ -32,6 +32,7 @@ const DomStuff = (() => {
     let winScreen = document.querySelector('.win-screen');
     let winMsg = document.querySelector('.win-msg');
     let retry = document.querySelector('.retry');
+    let cellParent = document.querySelector('.cell-container')
 
     return {
         startBtn,
@@ -39,6 +40,7 @@ const DomStuff = (() => {
         winScreen,
         winMsg,
         retry,
+        cellParent,
     }
 })();
 
@@ -49,11 +51,16 @@ const GameBoard = (() => {
      */
 
     let board = ['', '', '', '', '', '', '', '', '',]
+    let playerSteps = 0;
+
+    let restartStepCounter = () => {playerSteps = 0};
 
     let render = () => {
         for (let i = 0; i < board.length; i++) {
             if (board[i] !== '') {
                 DomStuff.cells[i].textContent = board[i];
+            } else {
+                DomStuff.cells[i].textContent = '';
             }
         }
     };
@@ -62,6 +69,8 @@ const GameBoard = (() => {
         for (let i = 0; i < board.length; i++) {
             board[i] = '';
         }
+
+        render();
     }
 
     let hideOptions = () => {
@@ -80,18 +89,20 @@ const GameBoard = (() => {
     let markBoard = (mark, index) => {
         board[index] = mark;
 
+        playerSteps++;
+
         render();
 
-        if (GameFlow.player1.mark === mark) {
-            GameFlow.checkWin(GameFlow.player1);
+        if (playerSteps === 9) {
+            GameFlow.draw();
         } else {
+            GameFlow.checkWin(GameFlow.player2);
             GameFlow.checkWin(GameFlow.player1);
         }
-
+        
         GameFlow.player1.changeTurn();
         GameFlow.player2.changeTurn();
     }
-
 
     return {
         render,
@@ -101,6 +112,7 @@ const GameBoard = (() => {
         hideWin,
         showWin,
         clearBoard,
+        restartStepCounter,
         }
 })();
 
@@ -113,8 +125,6 @@ const GameFlow = (() => {
     const player1 = Player('', undefined);
     const player2 = Player('', undefined);
 
-    let eventFuncContainer = () => {playerMarkBoard(i)};
-
     let start = () => {
         let radioBtns = document.getElementsByName('mark');
 
@@ -125,34 +135,34 @@ const GameFlow = (() => {
                     player1.mark = 'x'; player1.changeTurnTo(true);
                     player2.mark = 'o'; player2.changeTurnTo(false);
                 } else if (e.value === 'o') {
-                    player1.mark = 'o'; player1.changeTurnTo(false); 
+                    player1.mark = 'o'; player1.changeTurnTo(false);
                     player2.mark = 'x'; player2.changeTurnTo(true);
                 }
 
                 GameBoard.hideOptions();
 
                 for (let i = 0; i < DomStuff.cells.length; i++) {
-                    DomStuff.cells[i].addEventListener('click', () => {playerMarkBoard(i)}, {once: true});
+                    DomStuff.cells[i].addEventListener('click', () => {GameFlow.playerMarkBoard(i)});
                 }
             }
         })
     };
 
     let playerMarkBoard = (i) => {
-        if (player1.getTurn() === true) {
-            GameBoard.markBoard(player1.mark, i);
+        if (DomStuff.cells[i].textContent === '') {
+            if (player1.getTurn() === true) {
+                GameBoard.markBoard(player1.mark, i);
+            } else {
+                GameBoard.markBoard(player2.mark, i);
+            }
         } else {
-            GameBoard.markBoard(player2.mark, i);
+            console.log('This slot is not avalible!')
         }
     }
 
     let checkWin = (n) => {
-
-        console.log('Hi, this is a test');
-
         /**checking rows and columns */
         for (let i = 0; i < 3; i++) {
-            console.log(GameBoard.board[i], GameBoard.board[i + 3], GameBoard.board[i + 6] === n.mark);
             if (GameBoard.board[i] === n.mark && GameBoard.board[i + 3] === n.mark && GameBoard.board[i + 6] === n.mark) {
                 Win(n)
             } else if (GameBoard.board[i * 3] === n.mark && GameBoard.board[(i * 3) + 1] === n.mark && GameBoard.board[(i * 3) + 2] === n.mark) {
@@ -168,10 +178,20 @@ const GameFlow = (() => {
         }
     }
 
+    let draw = () => {
+        GameBoard.restartStepCounter()
+
+        GameBoard.showWin();
+
+        DomStuff.winMsg.textContent = 'It\'s a draw'
+
+        GameBoard.clearBoard();
+
+        DomStuff.retry.addEventListener('click', GameBoard.hideWin);
+    }
+
     let Win = (player) => {
-        DomStuff.cells.forEach(e => {
-            e.textContent = '';
-        });
+        GameBoard.restartStepCounter();
 
         GameBoard.showWin();
 
@@ -179,11 +199,13 @@ const GameFlow = (() => {
             player1.addWin();
             DomStuff.winMsg.textContent = `${player1.mark} Won! wins: ${player1.getWins()}`;
         } else {
-            player1.addWin();
+            player2.addWin();
             DomStuff.winMsg.textContent = `${player2.mark} Won! wins: ${player2.getWins()}`;
         }
 
         GameBoard.clearBoard();
+        /**First I remove the last eventlistener if there was a previous then add the new elvent listener to it */
+        DomStuff.retry.removeEventListener('click', GameBoard.hideWin);
         DomStuff.retry.addEventListener('click', GameBoard.hideWin);
     }
 
@@ -193,6 +215,7 @@ const GameFlow = (() => {
         player1,
         player2,
         checkWin,
+        draw,
         }
 })();
 
