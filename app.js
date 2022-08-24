@@ -36,6 +36,8 @@ const DomStuff = (() => {
     let winCounter1 = document.querySelector('.win-counter-p1');
     let winCounter2 = document.querySelector('.win-counter-p2');
     let nameExtention = document.querySelector('.name-extention');
+    let score1 = document.querySelector('.score-txt-1');
+    let score2 = document.querySelector('.score-txt-2');
 
     return {
         startBtn,
@@ -47,6 +49,8 @@ const DomStuff = (() => {
         winCounter1,
         winCounter2,
         nameExtention,
+        score1,
+        score2,
     }
 })();
 
@@ -108,6 +112,16 @@ const GameBoard = (() => {
         GameFlow.player2.changeTurn();
     }
 
+    let updateScoreDisplay = () => {
+        if (GameFlow.player1.mark === 'x') {
+            DomStuff.score1.textContent = GameFlow.player1.getWins();
+            DomStuff.score2.textContent = GameFlow.player2.getWins();
+        } else {
+            DomStuff.score1.textContent = GameFlow.player2.getWins();
+            DomStuff.score2.textContent = GameFlow.player1.getWins();
+        }
+    }
+
     return {
         render,
         hideOptions,
@@ -118,6 +132,7 @@ const GameBoard = (() => {
         clearBoard,
         getSteps,
         restartStepCounter,
+        updateScoreDisplay,
         }
 })();
 
@@ -217,6 +232,9 @@ const GameFlow = (() => {
         DomStuff.nameExtention.textContent = 'wins!';
 
         GameBoard.clearBoard();
+
+        GameBoard.updateScoreDisplay();
+
         /**First I remove the last eventlistener if there was a previous then add the new elvent listener to it */
         DomStuff.retry.removeEventListener('click', GameBoard.hideWin);
         DomStuff.retry.addEventListener('click', GameBoard.hideWin);
