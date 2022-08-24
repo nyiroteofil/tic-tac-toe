@@ -35,6 +35,7 @@ const DomStuff = (() => {
     let cellParent = document.querySelector('.cell-container');
     let winCounter1 = document.querySelector('.win-counter-p1');
     let winCounter2 = document.querySelector('.win-counter-p2');
+    let nameExtention = document.querySelector('.name-extention');
 
     return {
         startBtn,
@@ -45,6 +46,7 @@ const DomStuff = (() => {
         cellParent,
         winCounter1,
         winCounter2,
+        nameExtention,
     }
 })();
 
@@ -58,6 +60,8 @@ const GameBoard = (() => {
     let playerSteps = 0;
 
     let restartStepCounter = () => {playerSteps = 0};
+
+    let getSteps = () => {return playerSteps};
 
     let render = () => {
         for (let i = 0; i < board.length; i++) {
@@ -97,13 +101,9 @@ const GameBoard = (() => {
 
         render();
 
-        if (playerSteps === 9) {
-            GameFlow.draw();
-        } else {
-            GameFlow.checkWin(GameFlow.player2);
-            GameFlow.checkWin(GameFlow.player1);
-        }
-        
+        GameFlow.checkWin(GameFlow.player2);
+        GameFlow.checkWin(GameFlow.player1);
+          
         GameFlow.player1.changeTurn();
         GameFlow.player2.changeTurn();
     }
@@ -116,6 +116,7 @@ const GameBoard = (() => {
         hideWin,
         showWin,
         clearBoard,
+        getSteps,
         restartStepCounter,
         }
 })();
@@ -168,18 +169,17 @@ const GameFlow = (() => {
         /**checking rows and columns */
         for (let i = 0; i < 3; i++) {
             if (GameBoard.board[i] === n.mark && GameBoard.board[i + 3] === n.mark && GameBoard.board[i + 6] === n.mark) {
-                Win(n)
+                Win(n);
             } else if (GameBoard.board[i * 3] === n.mark && GameBoard.board[(i * 3) + 1] === n.mark && GameBoard.board[(i * 3) + 2] === n.mark) {
-                Win(n)
+                Win(n);
+            } else  if (GameBoard.board[0] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[8] === n.mark) {
+                Win(n);
+            } else if (GameBoard.board[6] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[2] === n.mark) {
+                Win(n);
+            }  else if (i === 2 && GameBoard.getSteps() === 9) {
+                draw();
             }
         };
-
-        /**checking cross */
-        if (GameBoard.board[0] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[8] === n.mark) {
-            Win(n);
-        } else if (GameBoard.board[6] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[2] === n.mark) {
-            Win(n);
-        }
     }
 
     let draw = () => {
@@ -188,6 +188,9 @@ const GameFlow = (() => {
         GameBoard.showWin();
 
         DomStuff.winMsg.textContent = 'It\'s a draw'
+        DomStuff.nameExtention.textContent = '';
+        DomStuff.winCounter1.textContent = '';
+        DomStuff.winCounter2.textContent = '';
 
         GameBoard.clearBoard();
 
@@ -210,6 +213,8 @@ const GameFlow = (() => {
             DomStuff.winCounter1.textContent = `${player2.mark.toUpperCase()}: ${player2.getWins()} wins`;
             DomStuff.winCounter2.textContent = `${player1.mark.toUpperCase()}: ${player1.getWins()} wins`;
         }
+
+        DomStuff.nameExtention.textContent = 'wins!';
 
         GameBoard.clearBoard();
         /**First I remove the last eventlistener if there was a previous then add the new elvent listener to it */

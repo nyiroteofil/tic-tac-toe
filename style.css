@@ -6,7 +6,10 @@ body {
     align-items: center;
     justify-content: center;
 
-    height: 100vh;
+    height: 98vh;
+    width: 95vw;
+
+    overflow: hidden;
 }
 
 .cell-container {
@@ -67,6 +70,7 @@ body {
     margin: 0 auto;
 
     background-color: rgb(62, 172, 112);
+    box-shadow: 7px 5px 5px 1px black;
 }
 
 .options > h2 {
@@ -169,6 +173,7 @@ button:active {
     margin: 0;
 
     background-color: rgba(36, 126, 33, 0.521);
+    box-shadow: 7px 5px 5px 1px black;
 
     position: absolute;
     top: 0;
@@ -180,7 +185,7 @@ button:active {
 .name > p {
     display: inline-block;
      
-    font-size: 30px;
+    font-size: 50px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -198,13 +203,15 @@ button:active {
     font-weight: 900;
     font-family: 'Raleway';
 }
+
 .win-counter-p1 {
     grid-row-start: 2;
 
     text-align: center;
-    font-size: 20px;
+    font-size: 1.6em;
     color: orangered;
     font-family: 'Raleway';
+    font-weight: 800;
 
     margin-left: 10px;
 }
@@ -213,12 +220,54 @@ button:active {
     grid-row-start: 3;
 
     text-align: center;
-    font-size: 15px;
-    color: grey;
+    font-size: 1.4em;
+    color: rgb(17, 68, 146);
     margin-left: 10px;
     font-family: 'Raleway';
+    font-weight: 800;
 }
 
 .retry {
     grid-row-start: 4;
+}
+
+@media screen and (max-width: 800px) {
+    .cell:hover {
+        background-color: black;
+    }
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 35px;;
+
+    background-color: rgb(0, 0, 0);
+}
+
+footer > p {
+    display: inline;
+    color:rgb(197, 207, 209);
+
+}
+
+footer > a {
+    display: inline;
+    color:rgb(226, 94, 33);
+    text-decoration: none;
+
+    transition: all 200ms linear;
+}
+
+footer > a:hover {
+    color: bisque;
+    font-size: 20px;
 }
