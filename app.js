@@ -109,9 +109,6 @@ const GameBoard = (() => {
             GameFlow.Win(GameFlow.player1)
         } else if (GameFlow.checkWin(GameFlow.player2)) {
             GameFlow.Win(GameFlow.player2)
-            return;
-        } else if (playerSteps === 9) {
-            GameFlow.draw();
         }
         
         GameFlow.player1.changeTurn();
@@ -190,14 +187,14 @@ const GameFlow = (() => {
         /**checking rows and columns */
         for (let i = 0; i < 3; i++) {
             if (GameBoard.board[i] === n.mark && GameBoard.board[i + 3] === n.mark && GameBoard.board[i + 6] === n.mark) {
-                return true
+                return true;
             } else if (GameBoard.board[i * 3] === n.mark && GameBoard.board[(i * 3) + 1] === n.mark && GameBoard.board[(i * 3) + 2] === n.mark) {
-                return true
+                return true;
             } else  if (GameBoard.board[0] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[8] === n.mark) {
-                return true
+                return true;
             } else if (GameBoard.board[6] === n.mark && GameBoard.board[4] === n.mark && GameBoard.board[2] === n.mark) {
-                return true
-            }  else {
+                return true;
+            } else if (i === 2) {
                 return false;
             }
         };
