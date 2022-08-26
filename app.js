@@ -109,6 +109,8 @@ const GameBoard = (() => {
             GameFlow.Win(GameFlow.player1)
         } else if (GameFlow.checkWin(GameFlow.player2)) {
             GameFlow.Win(GameFlow.player2)
+        } else {
+            GameFlow.draw();
         }
         
         GameFlow.player1.changeTurn();
