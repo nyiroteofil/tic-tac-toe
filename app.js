@@ -109,7 +109,7 @@ const GameBoard = (() => {
             GameFlow.Win(GameFlow.player1)
         } else if (GameFlow.checkWin(GameFlow.player2)) {
             GameFlow.Win(GameFlow.player2)
-        } else {
+        } else if (playerSteps === 9) {
             GameFlow.draw();
         }
         
